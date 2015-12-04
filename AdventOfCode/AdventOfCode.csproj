@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="inputDayOne.txt" />
+    <Content Include="inputDayFour.txt" />
     <Content Include="inputDayThree.txt" />
     <Content Include="inputDayTwo.txt" />
   </ItemGroup>

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using AdventOfCode.Classes;
 using System.Linq;
+using System.Security.Cryptography;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -130,15 +132,15 @@ namespace AdventOfCode
             oldSanta.DeliverPresent(firstHouse);
             roboSanta.DeliverPresent(firstHouse);
 
-            List<House> visitedHouses = new List<House>(new House[]{ firstHouse });
+            List<House> visitedHouses = new List<House>(new House[] { firstHouse });
 
             Console.WriteLine("Visiting houses");
 
-            for(int i = 0; i < input.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
                 Santa currentSanta;
 
-                if(i % 2 == 0)
+                if (i % 2 == 0)
                 {
                     currentSanta = oldSanta;
                 }
@@ -165,7 +167,7 @@ namespace AdventOfCode
 
                 House currentHouse = visitedHouses.Where(h => h.North == currentSanta.North && h.East == currentSanta.East).FirstOrDefault();
 
-                if(currentHouse == null)
+                if (currentHouse == null)
                 {
                     currentHouse = new House(currentSanta.North, currentSanta.East);
 
@@ -180,9 +182,48 @@ namespace AdventOfCode
 
         }
 
+        public static void DayFour()
+        {
+            MD5 md5 = MD5.Create();
+
+            string input = File.ReadAllText("input.txt");
+
+            int counter = 0;
+
+            bool found = false;
+            
+            while (!found)
+            {
+                Console.WriteLine("Counter is: " + counter.ToString());
+                string newInput = input + counter;
+
+                byte[] hash = md5.ComputeHash(Encoding.ASCII.GetBytes(newInput));
+
+                StringBuilder sb = new StringBuilder();
+
+                for (int i = 0; i < hash.Length; i++)
+                {
+                    sb.Append(hash[i].ToString("x2"));
+                }
+
+                if (sb.ToString().Substring(0,6) == "000000")
+                {
+                    found = true;
+                }
+                else
+                {
+                    counter++;
+                }
+
+            }
+            
+            Console.WriteLine("You had to count to: " + counter.ToString());
+            Console.ReadLine();
+        }
+
         static void Main(string[] args)
         {
-            DayThree();
+            DayFour();
         }
     }
 }
