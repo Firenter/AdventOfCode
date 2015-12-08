@@ -239,7 +239,7 @@ namespace AdventOfCode
 
                 bool doubleNoOverlap = false;
                 bool repeating = false;
-                
+
                 List<string> comboList = new List<string>();
 
                 string previousCombo = "";
@@ -263,8 +263,9 @@ namespace AdventOfCode
                 bool multiple = false;
 
                 //check if combo apears more than once
-                comboList.ForEach(delegate (string combi) {
-                    if(comboList.IndexOf(combi) != comboList.LastIndexOf(combi))
+                comboList.ForEach(delegate (string combi)
+                {
+                    if (comboList.IndexOf(combi) != comboList.LastIndexOf(combi))
                     {
                         multiple = true;
                     }
@@ -275,13 +276,13 @@ namespace AdventOfCode
                 //check for repeat with skip one letter
                 for (int j = 0; j < line.Length - 2; j++)
                 {
-                    if(line[j] == line[j + 2])
+                    if (line[j] == line[j + 2])
                     {
                         repeating = true;
                     }
                 }
 
-                if(doubleNoOverlap && repeating)
+                if (doubleNoOverlap && repeating)
                 {
                     Console.WriteLine("Nice");
                     amountNice++;
@@ -307,9 +308,107 @@ namespace AdventOfCode
             Console.ReadLine();
         }
 
+        public static void DaySix()
+        {
+            int gridLength = 1000;
+            int gridWidth = 1000;
+
+            int[,] lights = new int[gridWidth, gridLength];
+
+            string[] commands = new string[] { "turn on", "turn off", "toggle" };
+
+            string through = " through ";
+
+            System.IO.StreamReader file = new System.IO.StreamReader("input.txt");
+
+            string line;
+
+            string thisCommand = "";
+            int commandNumber = -1;
+
+            while ((line = file.ReadLine()) != null)
+            {
+                //check our command
+                for (int c = 0; c < commands.Length; c++)
+                {
+                    if (line.Contains(commands[c]))
+                    {
+                        thisCommand = commands[c];
+                        commandNumber = c;
+                        break;
+                    }
+                }
+
+                //find the coords
+                string[] firstCoords;
+                string[] secondCoords;
+
+                string sansCommand = line.Substring(thisCommand.Length);
+
+                firstCoords = sansCommand.Substring(0, sansCommand.IndexOf(through)).Trim().Split(',');
+
+                secondCoords = sansCommand.Substring(sansCommand.IndexOf(through) + through.Length).Trim().Split(',');
+
+                //coords into actual numbers
+                int minX = Convert.ToInt32(firstCoords[0]);
+                int minY = Convert.ToInt32(firstCoords[1]);
+
+                int maxX = Convert.ToInt32(secondCoords[0]);
+                int maxY = Convert.ToInt32(secondCoords[1]);
+
+                /*Console.WriteLine("MinX: " + minX);
+                Console.WriteLine("MaxX: " + maxX);
+                Console.WriteLine("MinY: " + minY);
+                Console.WriteLine("MaxY: " + maxY);
+
+                Console.WriteLine("Command: " + thisCommand);*/
+
+                //execute command on selected range
+                for (int l = minX; l <= maxX; l++)
+                {
+                    for (int w = minY; w <= maxY; w++)
+                    {
+                        switch (thisCommand)
+                        {
+                            case "turn on":
+                                lights[l, w] += 1;
+                                break;
+                            case "turn off":
+                                if (lights[l, w] > 0)
+                                {
+                                    lights[l, w] -= 1;
+                                }
+                                break;
+                            case "toggle":
+                                lights[l, w] += 2;
+                                break;
+                            default:
+                                Console.WriteLine("Woah, what are you doing?");
+                                break;
+                        }
+                    }
+                }
+            }
+
+            //check how many lights are on
+            int numberOn = 0;
+
+            for (int q = 0; q < gridLength; q++)
+            {
+                for (int v = 0; v < gridWidth; v++)
+                {
+                    numberOn += lights[q, v];
+                }
+            }
+
+            Console.WriteLine("Total brightness: " + numberOn);
+
+            Console.ReadLine();
+        }
+
         static void Main(string[] args)
         {
-            DayFive();
+            DaySix();
         }
     }
 }

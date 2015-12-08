@@ -52,6 +52,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="inputDaySix.txt" />
     <Content Include="inputDayFive.txt" />
     <Content Include="inputDayOne.txt" />
     <Content Include="inputDayFour.txt" />
