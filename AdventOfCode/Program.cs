@@ -191,7 +191,7 @@ namespace AdventOfCode
             int counter = 0;
 
             bool found = false;
-            
+
             while (!found)
             {
                 Console.WriteLine("Counter is: " + counter.ToString());
@@ -206,7 +206,7 @@ namespace AdventOfCode
                     sb.Append(hash[i].ToString("x2"));
                 }
 
-                if (sb.ToString().Substring(0,6) == "000000")
+                if (sb.ToString().Substring(0, 6) == "000000")
                 {
                     found = true;
                 }
@@ -216,14 +216,100 @@ namespace AdventOfCode
                 }
 
             }
-            
+
             Console.WriteLine("You had to count to: " + counter.ToString());
+            Console.ReadLine();
+        }
+
+        public static void DayFive()
+        {
+            System.IO.StreamReader file = new System.IO.StreamReader("input.txt");
+
+            Console.WriteLine("Checking who's naughty and nice");
+
+            string line;
+
+            int amountNice = 0;
+
+            while ((line = file.ReadLine()) != null)
+            {
+                /*int vowelCount = 0;
+                bool doubleLetter = false;
+                bool hasDisallowed = false;*/
+
+                bool doubleNoOverlap = false;
+                bool repeating = false;
+                
+                List<string> comboList = new List<string>();
+
+                string previousCombo = "";
+                bool overlap = false;
+
+                //create all combos
+                for (int i = 0; i < line.Length - 1; i++)
+                {
+                    string combo = line[i].ToString() + line[i + 1].ToString();
+
+                    //check for overlap
+                    if (combo.Equals(previousCombo))
+                    {
+                        overlap = true;
+                    }
+
+                    comboList.Add(combo);
+                    previousCombo = combo;
+                }
+
+                bool multiple = false;
+
+                //check if combo apears more than once
+                comboList.ForEach(delegate (string combi) {
+                    if(comboList.IndexOf(combi) != comboList.LastIndexOf(combi))
+                    {
+                        multiple = true;
+                    }
+                });
+
+                doubleNoOverlap = multiple && !overlap;
+
+                //check for repeat with skip one letter
+                for (int j = 0; j < line.Length - 2; j++)
+                {
+                    if(line[j] == line[j + 2])
+                    {
+                        repeating = true;
+                    }
+                }
+
+                if(doubleNoOverlap && repeating)
+                {
+                    Console.WriteLine("Nice");
+                    amountNice++;
+                }
+                else
+                {
+                    Console.WriteLine("Naughty");
+                }
+
+                /*if (vowelCount >= 3 && doubleLetter && !hasDisallowed)
+                {
+                    Console.WriteLine("Nice");
+                    amountNice++;
+                }
+                else
+                {
+                    Console.WriteLine("Naughty");
+                }*/
+
+            }
+
+            Console.WriteLine("So many nice words: " + amountNice);
             Console.ReadLine();
         }
 
         static void Main(string[] args)
         {
-            DayFour();
+            DayFive();
         }
     }
 }
